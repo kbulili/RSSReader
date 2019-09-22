@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RssReader</string>
+    <string name="pubData">%1$tm/%1$td/%1$tH:00</string>
 </resources>
