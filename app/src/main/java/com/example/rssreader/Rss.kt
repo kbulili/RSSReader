@@ -4,17 +4,16 @@ import android.content.AsyncTaskLoader
 import android.content.Context
 import org.w3c.dom.NodeList
 import java.io.InputStream
-import java.security.AccessControlContext
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
-data class Article(val title: String, val link: String, val pubData: Date)
+data class Article(val title: String, val link: String, val pubDate: Date)
 
 data class Rss(val title: String,
-               val pubData: Date, val article: List<Article>)
+               val pubDate: Date, val article: List<Article>)
 
 fun parseRss(stream: InputStream) : Rss{
 
@@ -39,7 +38,7 @@ fun parseRss(stream: InputStream) : Rss{
         val article = Article(
             title = xPath.evaluate("./title/text()", item),
             link = xPath.evaluate("./link/text()", item),
-            pubData = formatter.parse(xPath.evaluate("./pubData/text()",
+            pubDate = formatter.parse(xPath.evaluate("./pubData/text()",
                 item)))
 
         articles.add(article)
@@ -47,18 +46,18 @@ fun parseRss(stream: InputStream) : Rss{
     }
 
     return Rss(title = xPath.evaluate("/rss/channel/title/text()", doc),
-        pubData =  formatter.parse(xPath.evaluate(
+        pubDate =  formatter.parse(xPath.evaluate(
             "/rss/channel/pubData/text()", doc)),
 
         article = articles)
 
 }
 
-class RssLoader(context: Context) : AsyncTaskLoader<RSS>(context){
+class RssLoader(context: Context) : AsyncTaskLoader<Rss>(context){
 
     private var cache : Rss? = null
 
-    override fun loadInBackground(): RSS? {
+    override fun loadInBackground(): Rss? {
 
         val response = httpGet("https://www.sbbit.jp/rss/HotTopics.rss")
 
@@ -72,7 +71,7 @@ class RssLoader(context: Context) : AsyncTaskLoader<RSS>(context){
 
     }
 
-    override fun deliverResult(data: RSS?) {
+    override fun deliverResult(data: Rss?) {
 
         if (isReset || data == null) return
 
