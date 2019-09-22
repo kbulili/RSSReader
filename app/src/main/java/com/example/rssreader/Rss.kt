@@ -1,7 +1,10 @@
 package com.example.rssreader
 
+import android.content.AsyncTaskLoader
+import android.content.Context
 import org.w3c.dom.NodeList
 import java.io.InputStream
+import java.security.AccessControlContext
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
@@ -48,5 +51,55 @@ fun parseRss(stream: InputStream) : Rss{
             "/rss/channel/pubData/text()", doc)),
 
         article = articles)
+
+}
+
+class RssLoader(context: Context) : AsyncTaskLoader<RSS>(context){
+
+    private var cache : Rss? = null
+
+    override fun loadInBackground(): RSS? {
+
+        val response = httpGet("https://www.sbbit.jp/rss/HotTopics.rss")
+
+        if (response != null){
+
+            return parseRss(response)
+
+        }
+
+        return null
+
+    }
+
+    override fun deliverResult(data: RSS?) {
+
+        if (isReset || data == null) return
+
+        cache =data
+        super.deliverResult(data)
+
+    }
+
+    override fun onStartLoading() {
+
+        if (cache != null){
+            deliverResult(cache)
+        }
+
+        if (takeContentChanged() || cache == null){
+            forceLoad()
+        }
+    }
+
+    override fun onStopLoading() {
+        cancelLoad()
+    }
+
+    override fun onReset() {
+        super.onReset()
+        onStopLoading()
+        cache = null
+    }
 
 }
