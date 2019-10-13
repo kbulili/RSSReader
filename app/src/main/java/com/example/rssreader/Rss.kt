@@ -13,7 +13,7 @@ import javax.xml.xpath.XPathFactory
 data class Article(val title: String, val link: String, val pubDate: Date)
 
 data class Rss(val title: String,
-               val pubDate: Date, val article: List<Article>)
+               val pubDate: Date, val articles: List<Article>)
 
 fun parseRss(stream: InputStream) : Rss{
 
@@ -49,7 +49,7 @@ fun parseRss(stream: InputStream) : Rss{
         pubDate =  formatter.parse(xPath.evaluate(
             "/rss/channel/pubData/text()", doc)),
 
-        article = articles)
+        articles = articles)
 
 }
 
