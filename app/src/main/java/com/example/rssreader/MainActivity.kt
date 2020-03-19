@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.rssreader
 
 import android.app.LoaderManager
@@ -7,6 +9,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +19,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
         loaderManager.initLoader(1, null, this)
     }
 
-    override fun onCreateLoader(id: Int, p1: Bundle?) = RssLoader(this)
+    override fun onCreateLoader(id: Int, args: Bundle?) = RssLoader(this)
 
     override fun onLoaderReset(loader: Loader<Rss>?) {
 
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
 
             val recyclerView = findViewById<RecyclerView>(R.id.articles)
 
-            val adapter = ArticlesAdapter(this, data.articles){article ->
+            val adapter = ArticlesAdapter(this, data.articles){ article ->
 
 
             }
