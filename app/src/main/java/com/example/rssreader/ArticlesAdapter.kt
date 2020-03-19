@@ -14,11 +14,6 @@ class ArticlesAdapter(private val context: Context,
 
     private val inflater = LayoutInflater.from(context)
 
-    class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val title = view.findViewById<TextView>(R.id.title)
-        val pubDate = view.findViewById<TextView>(R.id.pubData)
-    }
-
     override fun getItemCount() = articles.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -48,5 +43,10 @@ class ArticlesAdapter(private val context: Context,
 
         holder.pubDate.text = context.getString(R.string.pubData, article.pubDate)
 
+    }
+
+    class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view){
+        val title = view.findViewById<TextView>(R.id.title)
+        val pubDate = view.findViewById<TextView>(R.id.pubData)
     }
 }
